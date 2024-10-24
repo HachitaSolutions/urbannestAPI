@@ -18,7 +18,7 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/user/signin", async (req, res, next) => {
+  app.post("/user/signin", async (req, res, next) => {
     try {
       const { email, password } = req.body;
       const { data } = await service.SignIn({

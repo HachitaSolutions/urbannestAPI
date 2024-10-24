@@ -50,7 +50,7 @@ class UserService {
   async SignIn(userParams) {
     const { email, password } = userParams;
     try {
-      const existingUser = await this.repository.FindUser(email);
+      const existingUser = await this.repository.FindUser({email});
       if (existingUser) {
         const validPassword = await ValidatePassword(
           password,
@@ -63,17 +63,21 @@ class UserService {
             _id: existingUser._id,
           });
           return FormateData({
-            id: existingCustomer._id,
+            id: existingUser._id,
             token,
             name: existingUser.name,
+            status: 'ok'
           });
+        } else {
+            return FormateData({
+                message: "Invalid Password",
+                status: "failed"
+              });
         }
       } else {
         return FormateData({
           message: "User does not exists!!!",
-          status: "success",
-          token,
-          id: (await result)._id,
+          status: "failed"
         });
       }
     } catch (error) {

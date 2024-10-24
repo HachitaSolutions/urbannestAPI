@@ -9,6 +9,7 @@ const UserSchema = new Schema(
     password: String,
     phone: String,
     isAdmin: Boolean,
+    salt: String,
     wishList: [{ type: Schema.Types.ObjectId, ref: "wishList", require: true }],
   },
   {
