@@ -47,6 +47,39 @@ class UserService {
       throw new APIError("User Not Found", error);
     }
   }
+  async SignIn(userParams) {
+    const { email, password } = userParams;
+    try {
+      const existingUser = await this.repository.FindUser(email);
+      if (existingUser) {
+        const validPassword = await ValidatePassword(
+          password,
+          existingUser.password,
+          existingUser.salt
+        );
+        if (validPassword) {
+          const token = await GenerateSignature({
+            email: existingUser.email,
+            _id: existingUser._id,
+          });
+          return FormateData({
+            id: existingCustomer._id,
+            token,
+            name: existingUser.name,
+          });
+        }
+      } else {
+        return FormateData({
+          message: "User does not exists!!!",
+          status: "success",
+          token,
+          id: (await result)._id,
+        });
+      }
+    } catch (error) {
+      throw new APIError("Invalid User Email/Password", error);
+    }
+  }
 }
 
 module.exports = UserService;
